@@ -1,0 +1,5 @@
+discord.py
+emoji
+crontab
+youtube_dl
+PyNaCl
