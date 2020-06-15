@@ -4,7 +4,7 @@ import sys
 from core import logger
 
 # get the path to sqlite3 db
-dir_path                     = os.path.dirname(os.path.realpath(__file__)) + '/../garden.db'
+path                         = os.path.dirname(os.path.realpath(__file__)) + '/../garden.db'
 
 def execute_order(sql, params=[]):
   cnx = sqlite3.connect(path)
