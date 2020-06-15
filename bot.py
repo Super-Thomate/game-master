@@ -16,8 +16,8 @@ prefix = ["!", "-"]
 initial_extensions = [   'cogs.dice'
                        , 'cogs.loader'
                        , 'cogs.music'
-                       , 'cogs.timer'
                        , 'cogs.nickname'
+                       , 'cogs.timer'
                      ]
 
 bot = commands.Bot(command_prefix=prefix)
