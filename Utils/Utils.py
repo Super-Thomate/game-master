@@ -13,6 +13,7 @@ from core.Logger import logger
 import botconfig
 
 import emoji
+import discord
 
 from discord.ext.commands import BadArgument, EmojiConverter
 from discord.ext import commands
@@ -174,5 +175,9 @@ def setInterval(timer, task, *args):
   if not isStop:
     _Timer(timer, setInterval, [timer, task, args]).start()
 
-def str_bool (boolean: bool):
-  return "True" if boolean else "False"
+async def confirm_command (message: discord.Message, status: bool):
+  reaction                   = emojize (':white_check_mark:') if status else emojize (':x:')
+  try:
+    await message.add_reaction (reaction)
+  except Exception as e:
+    logger ("Utils::confirm_command", f"{type(e).__name__} - {e}")

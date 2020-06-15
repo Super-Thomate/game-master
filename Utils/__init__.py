@@ -12,4 +12,4 @@ from .Utils import parse_time
 from .Utils import require
 from .Utils import emojize
 from .Utils import demojize
-from .Utils import str_bool
+from .Utils import confirm_command

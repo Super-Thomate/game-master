@@ -3,7 +3,7 @@ from discord.ext import commands
 
 import Utils
 
-from core import logger, fetch_one_line
+from core import logger, fetch_one_line, execute_order
 
 class Nickname(commands.Cog):
   def __init__(self, bot):
@@ -27,9 +27,16 @@ class Nickname(commands.Cog):
     guild_id                 = ctx.guild.id
     user_id                  = ctx.author.id
     channel_id               = voiceChannel.id
+    order                    = 'insert into nickname_set (nickname, user_id, channel_id ) values (?, ?, ?) ; '
     select                   = 'select count (*) from `nickname_set` where user_id=? and channel_id=? ;'
     data                     = fetch_one_line (select, [user_id, channel_id])
-    logger ("nickname::set", "In data: {}".format (data))
-    
-    
-    
+    if data [0]:
+      order                  = 'update nickname_set set nickname=? where user_id=? and channel_id=? ;'
+    try:
+      execute_order (order, [nickname, user_id, channel_id])
+    except Exception as e:
+      logger ("nickname::set", "{} - {}".format (type (e).__name__, e))
+      await Utils.confirm_command (ctx.message, False)
+      return
+    await ctx.send ("Nickname set to `{}`".format (nickname))
+    await Utils.confirm_command (ctx.message, True)

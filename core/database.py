@@ -57,7 +57,6 @@ def create_table():
     ### NICKNAME COG
     cursor.execute (
                       'CREATE TABLE IF NOT EXISTS `nickname_set` ('+
-                      '`guild_id` INTEGER NOT NULL, '+
                       '`user_id` INTEGER NOT NULL, '+
                       '`channel_id` INTEGER NOT NULL, '+
                       '`nickname` TEXT NOT NULL, '+
