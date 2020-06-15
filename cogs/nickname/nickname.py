@@ -52,6 +52,7 @@ class Nickname(commands.Cog):
       channel_id             = voiceChannel.id
       select                 = 'select nickname from `nickname_set` where user_id=? and channel_id=? ;'
       data                   = fetch_one_line (select, [user_id, channel_id])
+      logger ("nickname::set", "data: {}".format (data))
       nickname               = data [0]
       if nickname:
         await ctx.send ("Nickname for {}: `{}`".format (voiceChannel.name, nickname))
