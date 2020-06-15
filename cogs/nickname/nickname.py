@@ -40,3 +40,24 @@ class Nickname(commands.Cog):
       return
     await ctx.send ("Nickname set to `{}`".format (nickname))
     await Utils.confirm_command (ctx.message, True)
+
+  @nickname.command()
+  async def get (self, ctx, voiceChannel: discord.VoiceChannel = None):
+    """
+    Get nickname for a specific voice channel or all channel if none provided
+    """
+    guild_id                 = ctx.guild.id
+    user_id                  = ctx.author.id
+    if voiceChannel is not None:
+      channel_id             = voiceChannel.id
+      select                 = 'select nickname from `nickname_set` where user_id=? and channel_id=? ;'
+      data                   = fetch_one_line (select, [user_id, channel_id])
+      nickname               = data [0]
+      if nickname:
+        await ctx.send ("Nickname for {}: `{}`".format (voiceChannel.name, nickname))
+      else:
+        await ctx.send ("No nickname for {}".format (voiceChannel.name))
+    else:
+      # do it for all
+      await ctx.send ("WIP")
+    await Utils.confirm_command (ctx.message, True)
