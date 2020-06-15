@@ -4,65 +4,75 @@ from discord.ext import commands
 
 import Utils
 
-from core import logger
+from core import logger, create_table
 
-class Loader(commands.Cog):
-  def __init__(self, bot):
-    self.bot = bot
+class Loader (commands.Cog):
+  def __init__ (self, bot):
+    self.bot                 = bot
 
   # Hidden means it won't show up on the default help.
-  @commands.command(name='load', hidden=True)
-  async def do_load_cog(self, ctx, *, cog: str):
+  @commands.command ()
+  async def load (self, ctx, *, cog: str):
     """
-    Load a cog for Garden
+    Load a cog (if not already loaded).
     """
-    cog = cog.lower()
+    cog                      = cog.lower ()
     try:
-      self.bot.load_extension(f'cogs.{cog}')
+      self.bot.load_extension (f'cogs.{cog}')
     except Exception as e:
-      await ctx.send("**`ERROR:`** {0} - {1}".format(type(e).__name__, e))
+      await ctx.send ("**`ERROR:`** {0} - {1}".format (type (e).__name__, e))
     else:
-      await ctx.send("**`SUCCESS`**")
+      await ctx.send ("**`SUCCESS`**")
 
-  @commands.command(name='unload', hidden=True)
-  async def do_unload_cog(self, ctx, *, cog: str):
+  @commands.command ()
+  async def unload (self, ctx, *, cog: str):
     """
-    Unload a cog for Garden
+    Unload a cog (if not already loaded).
     """
-    cog = cog.lower()
+    cog                      = cog.lower ()
     try:
-      self.bot.unload_extension(f'cogs.{cog}')
+      self.bot.unload_extension (f'cogs.{cog}')
     except Exception as e:
-      await ctx.send("**`ERROR:`** {0} - {1}".format(type(e).__name__, e))
+      await ctx.send ("**`ERROR:`** {0} - {1}".format (type (e).__name__, e))
     else:
-      await ctx.send("**`SUCCESS`**")
+      await ctx.send ("**`SUCCESS`**")
 
-  @commands.command(name='reload', hidden=True)
-  async def do_reload_cog(self, ctx, *, cog: str):
+  @commands.command ()
+  async def reload (self, ctx, *, cog: str):
     """
-    Reload a cog for Garden
+    Reload a cog.
     """
-    cog = cog.lower()
+    cog                      = cog.lower()
     try:
-      self.bot.unload_extension(f'cogs.{cog}')
-      self.bot.load_extension(f'cogs.{cog}')
+      self.bot.unload_extension (f'cogs.{cog}')
+      self.bot.load_extension (f'cogs.{cog}')
     except Exception as e:
-      await ctx.send("**`ERROR:`** {0} - {1}".format(type(e).__name__, e))
+      await ctx.send ("**`ERROR:`** {0} - {1}".format (type (e).__name__, e))
     else:
-      await ctx.send("**`SUCCESS`**")
+      await ctx.send ("**`SUCCESS`**")
 
-  @commands.command(name='cogs', hidden=True)
-  async def list_load(self, ctx):
+  @commands.command ()
+  async def cogs (self, ctx):
     """
     Command which lists all loaded cogs
     """
-    all_loaded = ""
-    for name in self.bot.cogs.keys():
-      all_loaded += f"- **{name}**\n"
+    all_loaded               = ""
+    for name in self.bot.cogs.keys ():
+      all_loaded            += f"- **{name}**\n"
     if not len(all_loaded):
-      all_loaded = "**NONE**"
+      all_loaded             = "**NONE**"
     try:
-      await ctx.send(all_loaded)
+      await ctx.send (all_loaded)
     except Exception as e:
-      logger ("loader::list_load", f'{type(e).__name__} - {e}')
+      logger ("loader::list_load", '{0} - {1}'.format (type (e).__name__, e))
+
+  @commands.command (aliases = ['db'])
+  async def database (self, ctx):
+    """
+    Launch the creation of database tables
+    """
+    try:
+      create_table ()
+    except Exception as e:
+      logger ("loader::list_load", '{0} - {1}'.format (type (e).__name__, e))
 

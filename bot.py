@@ -17,6 +17,7 @@ initial_extensions = [   'cogs.dice'
                        , 'cogs.loader'
                        , 'cogs.music'
                        , 'cogs.timer'
+                       , 'cogs.nickname'
                      ]
 
 bot = commands.Bot(command_prefix=prefix)
