@@ -62,3 +62,33 @@ class Nickname(commands.Cog):
       # do it for all
       await ctx.send ("WIP")
     await Utils.confirm_command (ctx.message, True)
+  
+  @discord.event
+  async def on_voice_state_update (self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
+    if before.channel == after.channel:
+      logger ("nickname::on_voice_state_update", "Nothing to do")
+      return
+    """
+    3 cases:
+      1. Join a channel => get a nickname
+      2. Change channel => change nickname
+      3. Leave a channel => get back my own nickname
+    """
+    if before.channel is None and after.channel is not None:
+      # JOIN
+      nickname              = self.get_nickname_for_channel (after.channel, member)
+    elif before.channel is not  None and after.channel is None:
+      # LEAVE
+      nickname              = member.name
+    else:
+      # CHANGE
+      nickname              = self.get_nickname_for_channel (after.channel, member)
+    await member.edit (nick=nickname)
+
+
+  def get_nickname_for_channel (self, channel: discord.VoiceChannel, member: discord.Member):
+    select                   = "select nickname from nickname_set where  user_id=? and channel_id=? ;"
+    data                     = fetch_one_line (select, [member.id, channel.id])
+    if data is not None:
+       return data [0]
+    return member.name
