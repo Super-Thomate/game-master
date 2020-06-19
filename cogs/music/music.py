@@ -215,6 +215,45 @@ class Music (commands.Cog):
         await ctx.send ("Uploaded "+file_name)
     await message.delete (delay=1)
 
+  @music.command(aliases=["sec1"])
+  async def secret1 (self, ctx):
+    """
+    Play a secret music 1
+    """
+    name = "Gealdyr_-_Loki"
+    voice_state = ctx.author.voice
+    if voice_state is None:
+      await ctx.send ("Not in a voice channel ?")
+      return
+    # already connected ?
+    if not ctx.guild.voice_client:
+      logger ("music::play", "not connected: establishing a connection")
+      voice_channel = voice_state.channel
+      if voice_channel is None:
+        await ctx.send ("No voice channel")
+        return
+      voice_client = await voice_channel.connect()
+    else:
+      logger ("music::play", "already connected")
+      voice_client = ctx.guild.voice_client
+    logger ("music::play", "start download")
+    async with ctx.typing():
+      player                 = discord.FFmpegPCMAudio (name+'.mp3')
+      logger ("music::play", "download source")
+      if voice_client.is_playing():
+        voice_client.stop()
+        logger ("music::play", "already on play")
+      """
+      voice_client.source = discord.PCMVolumeTransformer(player)
+      voice_client.source.volume = self.volume
+      """
+      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+
+      logger ("music::play", "launch song")
+    await ctx.send('`OK`')
+    logger ("music::play", "Now playing")
+
+
 youtube_dl.utils.bug_reports_message = lambda: ''
 
 ytdl_format_options = {
