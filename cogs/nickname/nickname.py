@@ -63,7 +63,7 @@ class Nickname(commands.Cog):
       await ctx.send ("WIP")
     await Utils.confirm_command (ctx.message, True)
   
-  @discord.event
+  @commands.Cog.listener()
   async def on_voice_state_update (self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
     if before.channel == after.channel:
       logger ("nickname::on_voice_state_update", "Nothing to do")
