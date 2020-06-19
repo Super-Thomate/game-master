@@ -247,7 +247,7 @@ class Music (commands.Cog):
       voice_client.source = discord.PCMVolumeTransformer(player)
       voice_client.source.volume = self.volume
       """
-      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else self.secret1(ctx))
 
       logger ("music::play", "launch song")
     await ctx.send('`OK`')
