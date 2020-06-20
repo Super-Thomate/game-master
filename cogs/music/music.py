@@ -64,14 +64,14 @@ class Music (commands.Cog):
     stream = False
     logger ("music::yplay", "start download")
     async with ctx.typing():
-      player                 = await YTDLSource.from_url(url, loop=self.bot.loop, stream=stream)
+      source                 = await YTDLSource.from_url(url, loop=self.bot.loop, stream=stream)
       logger ("music::yplay", "download source")
       if voice_client.is_playing():
         voice_client.stop()
         logger ("music::yplay", "already on play")
-      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+      voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
       logger ("music::yplay", "launch song")
-    await ctx.send('Now playing: {}'.format(player.title))
+    await ctx.send('Now playing: {}'.format(source.title))
     logger ("music::yplay", "Now playing")
 
   @music.command(aliases=["yd", "download"])
@@ -80,9 +80,9 @@ class Music (commands.Cog):
     Download a youtube soundtrack in mp3. Usage: -m yd <url>
     """
     logger ("music::ydownload", url)
-    player                 = await YTDLSource.from_url(url, loop=self.bot.loop)
+    source                 = await YTDLSource.from_url(url, loop=self.bot.loop)
     logger ("music::ydownload", "download source")
-    await ctx.send('Now playing: {}'.format(player.title))
+    await ctx.send('Now playing: {}'.format(source.title))
     logger ("music::ydownload", "Now playing")
 
 
@@ -109,7 +109,6 @@ class Music (commands.Cog):
       voice_client = ctx.guild.voice_client
     logger ("music::play", "start download")
     async with ctx.typing():
-      player                 = discord.FFmpegPCMAudio (name+'.mp3')
       logger ("music::play", "download source")
       if voice_client.is_playing():
         voice_client.stop()
@@ -248,16 +247,13 @@ class Music (commands.Cog):
       voice_client = ctx.guild.voice_client
     logger ("music::play", "start download")
     async with ctx.typing():
-      player                 = discord.FFmpegPCMAudio (name+'.mp3')
       logger ("music::play", "download source")
       if voice_client.is_playing():
         voice_client.stop()
         logger ("music::play", "already on play")
-      """
-      voice_client.source = discord.PCMVolumeTransformer(player)
-      voice_client.source.volume = self.volume
-      """
-      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+      source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio (name+'.mp3'))
+      source.volume = self.volume
+      voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
       logger ("music::play", "launch song")
     await ctx.send('`OK`')
