@@ -21,6 +21,15 @@ class Music (commands.Cog):
   def __init__(self, bot):
     self.bot                 = bot
     self.volume              = 0.6
+    self.players             = {}
+
+  def set_player (self, player, guild: discord.Guild):
+    if guild:
+      self.players          [guild.id] = player
+    return player
+
+  def get_player_in (self, guild: discord.Guild):
+    return self.players.get(guild.id)
 
   @commands.group(aliases=["m"])
   @commands.guild_only()
@@ -105,10 +114,10 @@ class Music (commands.Cog):
       if voice_client.is_playing():
         voice_client.stop()
         logger ("music::play", "already on play")
-      """
-      voice_client.source = discord.PCMVolumeTransformer(player)
+      #"""
+      voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
       voice_client.source.volume = self.volume
-      """
+      #"""
       voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
       logger ("music::play", "launch song")
@@ -253,11 +262,6 @@ class Music (commands.Cog):
       logger ("music::play", "launch song")
     await ctx.send('`OK`')
     logger ("music::play", "Now playing")
-
-  def play_music(self, ctx: commands.Context, name: str):
-    voice_client             = ctx.guild.voice_client
-    player                   = discord.FFmpegPCMAudio (name+'.mp3')
-    voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else self.play_music(ctx,name))
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 
