@@ -248,14 +248,15 @@ class Music (commands.Cog):
       voice_client.source = discord.PCMVolumeTransformer(player)
       voice_client.source.volume = self.volume
       """
-      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else self.play_music(voice_client,player))
+      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else self.play_music(voice_client,name))
 
       logger ("music::play", "launch song")
     await ctx.send('`OK`')
     logger ("music::play", "Now playing")
 
-  def play_music(self, voice_client: discord.VoiceClient, player: discord.FFmpegPCMAudio):
-    voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else self.play_music(voice_client,player))
+  def play_music(self, voice_client: discord.VoiceClient, name: str):
+    player                   = discord.FFmpegPCMAudio (name+'.mp3')
+    voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else self.play_music(voice_client,name))
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 
