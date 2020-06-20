@@ -229,8 +229,8 @@ class Music (commands.Cog):
     """
     Play a secret music 1
     """
-    #name = "Gealdyr_-_Loki"
-    name = "Go_bwah"
+    name = "Gealdyr_-_Loki"
+    #name = "Go_bwah"
     voice_state = ctx.author.voice
     if voice_state is None:
       await ctx.send ("Not in a voice channel ?")
