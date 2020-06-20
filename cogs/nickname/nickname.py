@@ -83,7 +83,10 @@ class Nickname(commands.Cog):
     else:
       # CHANGE
       nickname              = self.get_nickname_for_channel (after.channel, member)
-    await member.edit (nick=nickname)
+    try:
+      await member.edit (nick=nickname)
+    except Exception as e:
+      logger ("nickname::on_voice_state_update", "{0} - {1}".format(type(e).__name__, e))
 
 
   def get_nickname_for_channel (self, channel: discord.VoiceChannel, member: discord.Member):
