@@ -20,7 +20,7 @@ dir_path                     = os.path.dirname(os.path.realpath(__file__)) + '/'
 class Music (commands.Cog):
   def __init__(self, bot):
     self.bot                 = bot
-    self.volume              = 0.6
+    self.volume              = 0.1
     self.players             = {}
 
   def set_player (self, player, guild: discord.Guild):
@@ -115,10 +115,10 @@ class Music (commands.Cog):
         voice_client.stop()
         logger ("music::play", "already on play")
       #"""
-      voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
-      voice_client.source.volume = self.volume
+      source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio (name+'.mp3'))
+      source.volume = self.volume
       #"""
-      voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+      voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
       logger ("music::play", "launch song")
     await ctx.send('Now playing: {}'.format(name+'.mp3'))
