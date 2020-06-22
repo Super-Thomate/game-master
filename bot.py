@@ -10,7 +10,7 @@ from core import run_task, logger
 
 # DISCORD_CRON_CRONTAB         = {}
 
-prefix = ["!", "-"]
+prefix = ["-"]
 
 # Define all of our cogs
 initial_extensions = [   'cogs.dice'
