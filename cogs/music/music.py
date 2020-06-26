@@ -16,11 +16,10 @@ import os
 import glob
 
 dir_path                     = os.path.dirname(os.path.realpath(__file__)) + '/'
-
+glob_volume                  = 0.5
 class Music (commands.Cog):
   def __init__(self, bot):
     self.bot                 = bot
-    self.volume              = 0.1
     self.players             = {}
 
   def set_player (self, player, guild: discord.Guild):
@@ -115,7 +114,7 @@ class Music (commands.Cog):
         logger ("music::play", "already on play")
       #"""
       source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio (name+'.mp3'))
-      source.volume = self.volume
+      source.volume = glob_volume
       #"""
       voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
@@ -252,7 +251,7 @@ class Music (commands.Cog):
         voice_client.stop()
         logger ("music::play", "already on play")
       source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio (name+'.mp3'))
-      source.volume = self.volume
+      source.volume = glob_volume
       voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
       logger ("music::play", "launch song")
@@ -289,7 +288,7 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.1):
-        super().__init__(source, volume)
+        super().__init__(source, glob_volume)
 
         self.data = data
 
